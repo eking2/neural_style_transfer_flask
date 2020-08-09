@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Neural Style Transfer{% endblock %}
+
+{% block content %}
+  <h1>Neural Style Transfer</h1>
+  <br>
+
+  <form action="" method="post" enctype="multipart/form-data">
+
+      {{ form.hidden_tag() }}
+
+      <table cellpadding = "5">
+        <tr>
+          <td>{{ form.content.label }}</td> <td>{{ form.content }}</td>
+        </tr>
+          <td>{{ form.style.label }}</td> <td>{{ form.style }}</td>
+        </tr>
+          <td>{{ form.size.label }}</td> <td>{{ form.size }}</td>
+        </tr>
+          <td>{{ form.steps.label }}</td> <td>{{ form.steps }}</td>
+        </tr>
+          <td>{{ form.alpha.label }}</td> <td>{{ form.alpha }}</td>
+        </tr>
+          <td>{{ form.beta.label }}</td> <td>{{ form.beta }}</td>
+        </tr>
+          <td>{{ form.style_weights.label }}</td> <td>{{ form.style_weights }}</td>
+        </tr>
+      </table>
+
+      <br>
+      {{ form.submit }}
+
+  </form>
+
+{% endblock %}
+
