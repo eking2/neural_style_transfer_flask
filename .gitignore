@@ -5,5 +5,7 @@ __pycache__/
 notebooks/
 .ipynb_checkpoints/
 *.ipynb
+test_images
+static/uploads/
 
 

@@ -4,8 +4,9 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField, IntegerField, TextAreaField, DecimalField
 from wtforms.validators import DataRequired
+from werkzeug.utils import secure_filename
 
-basedir = Path(__file__).absolute()
+basedir = Path.cwd().absolute()
 
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
 UPLOAD_FOLDER = Path(basedir, 'static/uploads')
@@ -24,10 +25,10 @@ class UploadForm(FlaskForm):
 "conv4_1" : 0.2,
 "conv5_1" : 0.2}'''
 
-    content = FileField('Content image', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Invalid image'),
+    content = FileField('Content image', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Invalid content image'),
                         FileRequired()])
 
-    style = FileField('Style image', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Invalid image'),
+    style = FileField('Style image', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Invalid style image'),
                       FileRequired()])
 
     size = IntegerField('Max image size', default=400, validators = [DataRequired()])
@@ -43,6 +44,23 @@ class UploadForm(FlaskForm):
 def home():
 
     form = UploadForm()
+
+    if form.validate_on_submit():
+
+        # save images
+        content_fn = secure_filename(form.content.data.filename)
+        style_fn = secure_filename(form.style.data.filename)
+
+        form.content.data.save(Path(app.config['UPLOAD_FOLDER'], content_fn))
+        form.style.data.save(Path(app.config['UPLOAD_FOLDER'], style_fn))
+
+        # get hyperparameters
+        size = form.size.data
+        steps = form.steps.data
+        alpha = form.alpha.data
+        beta = form.beta.data
+        style_weights = form.style_weights.data
+
 
     return render_template('index.html', form=form)
 
