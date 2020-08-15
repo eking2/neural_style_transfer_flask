@@ -7,5 +7,6 @@ notebooks/
 *.ipynb
 test_images
 static/uploads/
+static/*.png
 
 

@@ -7,13 +7,14 @@ from io import StringIO
 import json
 
 
-def load_image(img_path, max_size, shape):
+def load_image(img_path, max_size=400, shape=None):
 
     '''convert image to tensor
 
     Args:
         img_path (str) : path to image
         max_size (int) : max dim size for image
+        shape (tuple of ints) : (height, width) to resize to
 
     Returns:
         image (tensor) : image tensor 
@@ -22,14 +23,15 @@ def load_image(img_path, max_size, shape):
     image = Image.open(img_path)
 
     # resize if image is larger than max_size
-    if max(image.size) < max_size:
-        size = max_size
-    else:
-        size = max(image.size)
+    if max(image.size) > max_size and shape is None:
+        image = transforms.Resize(max_size)(image)
+
+    if shape:
+        image = transforms.Resize(shape)(image)
 
     # normalize with ImageNet stats
     transform = transforms.Compose([
-        transforms.Resize(size, interpolation=5),  # Lanczos
+        #transforms.Resize(size, interpolation=5),  # Lanczos
         transforms.ToTensor(),
         transforms.Normalize(mean = (0.485, 0.456, 0.406),
                              std = (0.229, 0.224, 0.225))])
@@ -95,7 +97,7 @@ def vgg_layers():
 
 def layers_from_json(json_str):
 
-    '''get layer indices from user json input 
+    '''get layer indices to extract feature maps from user json input 
 
     Args:
         json_str (str) : input format is {layer name : weight}

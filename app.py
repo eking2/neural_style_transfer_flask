@@ -19,6 +19,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 mb max upload
 
 class UploadForm(FlaskForm):
 
+    # default feature map weights
     weights = '''{"conv1_1" : 1,
 "conv2_1" : 0.75,
 "conv3_1" : 0.2,
