@@ -2,8 +2,9 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 import matplotlib.pyplot as plt
-from model import VGG
-from utils import load_image, tensor_to_image, layers_from_json
+import decimal
+from .model import VGG
+from .utils import load_image, tensor_to_image, layers_from_json
 
 
 def gram_matrix(tensor):
@@ -11,8 +12,8 @@ def gram_matrix(tensor):
     '''calculate feature correlations with gram matrix
 
     Args:
-        tensor (tensor) : conv feature tensor 
-    
+        tensor (tensor) : conv feature tensor
+
     Returns:
         gram (tensor) : gram matrix
     '''
@@ -56,7 +57,7 @@ def style_transfer(content, style, model, steps, alpha, beta, layers_df):
     # save 5 intermediate images + 2 end points, equally spaced
     steps_to_save = torch.linspace(0, steps, 7).round().long()
 
-    for step in range(steps):
+    for step in range(steps+1):
         print(step)
 
         # get features
@@ -99,18 +100,18 @@ def style_transfer(content, style, model, steps, alpha, beta, layers_df):
 
         # denorm to undo transforms
         if step in steps_to_save:
-            save_path = f'../static/output_{step}.png'
+            save_path = f'static/output_{step}.png'
             target_img = tensor_to_image(target)
             plt.imshow(target_img)
-            plt.axis('off')
             plt.savefig(save_path, bbox_inches='tight')
+            plt.close()
 
 
 def test():
 
 
-    steps = 2_000    
-    size = 100
+    steps = 2_000
+    size = 200
     alpha = 1
     beta = 1e6
 
@@ -125,7 +126,13 @@ def test():
     content_path = '../test_images/YellowLabradorLooking_new.jpg'
     style_path = '../test_images/Vassily_Kandinsky,_1913_-_Composition_7.jpg'
     content, style = resize_images(content_path, style_path, size)
-    
+    print('content:', content.shape)
+    print('style:', style.shape)
+
+    #plt.imshow(content.cpu().numpy().squeeze().transpose(1, 2, 0))
+    #plt.savefig('test_content.png')
+    #plt.close()
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     content = content.to(device)
     style = style.to(device)
@@ -133,7 +140,7 @@ def test():
 
     style_transfer(content, style, model, steps, alpha, beta, layers_df)
 
-test()
+#test()
 
 
 
