@@ -46,5 +46,17 @@
 
   </form>
 
+    <br>
+    {% if results != None %}
+
+        <a href= {{ url_for('download') }}>Download images</a>
+        <br>
+        <br>
+
+        {% for image in results %}
+        <img src = {{ image }} > <br>
+        {% endfor %}
+
+    {% endif %}
 {% endblock %}
 

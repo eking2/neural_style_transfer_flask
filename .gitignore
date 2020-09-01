@@ -8,5 +8,6 @@ notebooks/
 test_images
 static/uploads/
 static/*.png
+static/*.zip
 
 

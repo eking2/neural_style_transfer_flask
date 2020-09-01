@@ -103,6 +103,7 @@ def style_transfer(content, style, model, steps, alpha, beta, layers_df):
             save_path = f'static/output_{step}.png'
             target_img = tensor_to_image(target)
             plt.imshow(target_img)
+            plt.axis('off')
             plt.savefig(save_path, bbox_inches='tight')
             plt.close()
 
