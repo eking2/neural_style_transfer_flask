@@ -49,6 +49,18 @@ def resize_images(content_path, style_path, size):
 
 
 def style_transfer(content, style, model, steps, alpha, beta, layers_df):
+    
+    '''run neural style transfer model
+
+    Args:
+        content (tensor) : content image tensor
+        style (tensor) : style image tensor
+        model (model) : pytorch VGG model 
+        steps (int) : number of steps to run
+        alpha (float) : content reconstruction weight
+        beta (float) : style reconstruction weight
+        layers_df (dataframe) : layer weights
+    '''
 
     # initialize generated image by cloning content and optimizer
     target = content.clone().requires_grad_(True)

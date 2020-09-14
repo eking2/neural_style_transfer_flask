@@ -3,6 +3,13 @@
 {% block title %}Neural Style Transfer{% endblock %}
 
 {% block content %}
+
+    <script>
+        function spinner() {
+            document.getElementsByClassName('spinner-border')[0].style.display='block';
+        }
+    </script>
+
   <h1>Neural Style Transfer</h1>
   <br>
 
@@ -44,9 +51,15 @@
       <br>
       {{ form.submit }}
 
+
   </form>
 
     <br>
+      <div class="spinner-border" role="status" style="display:none;color:#007bff">
+        <span class="sr-only">Loading...</span>
+      </div>
+    <br>
+
     {% if results != None %}
 
         <a href= {{ url_for('download') }}>Download images</a>
@@ -59,4 +72,5 @@
 
     {% endif %}
 {% endblock %}
+
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-from flask import Flask, render_template, send_from_directory, abort
+from flask import Flask, render_template, send_from_directory, abort, Response
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField, IntegerField, TextAreaField, DecimalField
@@ -49,7 +49,7 @@ class UploadForm(FlaskForm):
     beta = DecimalField('Style recon weight (\u03B2)', default=1e6, validators = [DataRequired()])
 
     style_weights = TextAreaField('Style layer weights', default=weights, validators = [DataRequired()], render_kw={'rows' : 10, 'cols' : 40})
-    submit = SubmitField('Submit')
+    submit = SubmitField('Submit', render_kw={'onclick' : 'spinner();'})
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -106,9 +106,20 @@ def home():
 
     return render_template('index.html', form=form, results=None)
 
+
 @app.route('/download')
 def download():
     return send_from_directory(directory='static', filename='outputs.zip', as_attachment=True)
+
+
+# progress bar by checking status of output images
+# would be cleaner to get current step directly from nst
+@app.route('/progress')
+def progress():
+    def generate():
+        x = 0
+
+    return Response(generate(), mimetype='text/event-stream')
 
 if __name__ == '__main__':
 
